@@ -1,0 +1,126 @@
+﻿@model PagedList.IPagedList<u21487822_HW06.Models.order>
+@using PagedList.Mvc;
+
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.13.2.min.js"></script>
+
+@*<style>
+
+    .ul.pagination {
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+    }
+
+    ul.pagination li {
+        display: inline;
+    }
+
+
+
+        ul.pagination li a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+        }
+
+            ul.pagination li a.active {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            ul.pagination li a:hover:not(.active) {
+                background-color: #ddd;
+            }
+
+</style>*@
+<br />
+<br />
+
+
+
+@using (Html.BeginForm())
+{
+<p class="form-inline">
+    <input type="date" class="form-control" placeholder="Enter product name..." name="dateSearch" />
+    <input type="submit" class="btn btn-primary" value="Search" />
+</p>
+}
+
+
+
+<br />}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+         {
+         <tr>
+            <td>
+                <h2>Order @item.order_id - @item.order_date.ToString("yyy/MM/dd")</h2>
+
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayName("Product Name")</th>
+                            <th>  @Html.DisplayName("List Price")</th>
+                            <th>  @Html.DisplayName("Quantity")</th>
+                            <th>  @Html.DisplayName("Total")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var orders in item.order_items)
+                        {
+                            var totalAmount = orders.list_price * orders.quantity;
+         <tr>
+                <td>@Html.DisplayFor(modelItem => orders.product.product_name)</td>
+                <td>@Html.DisplayFor(modelItem => orders.list_price)</td>
+                <td>@Html.DisplayFor(modelItem => orders.quantity)</td>
+                <td>@totalAmount</td>
+        </tr>                }
+                    </tbody>
+                </table>
+
+            </td>
+
+        </tr>
+         }
+    </tbody>
+
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+
+
+
+
+
+@section scripts{
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $(".form-control").datepicker({
+                dateFormat: "dd/mm/yy",
+                changemonth: true,
+                changeyear: true
+            });
+        });</script>
+}

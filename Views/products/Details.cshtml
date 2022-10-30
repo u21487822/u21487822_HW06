@@ -1,0 +1,93 @@
+﻿@model u21487822_HW06.Models.product
+
+@{ ViewBag.Title = "Details"; }
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">Close</button>
+    <h3 class="modal-title"> Details</h3>
+</div>
+
+<div>
+    <div class="text-center">
+        <h4>@Model.product_name</h4>
+    </div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.product_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Year")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.model_year)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Price")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.list_price)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Brand")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.brand.brand_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Category")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.category.category_name)
+        </dd>
+
+    </dl>
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            Store
+        </th>
+        <th>
+            Quantity
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model.stocks)
+    {
+<tr>
+     <td>
+        @Html.DisplayFor(modelItem => item.store.store_name)
+     </td>
+     <td>
+        @if (item.quantity <= 0)
+        {
+            <p style="color:orangered">Out of stock</p> 
+         }
+        else
+        {
+            @Html.DisplayFor(modelItem => item.quantity)}
+     </td>
+</tr>
+        }
+
+
+</table>
+
+<div class="modal-footer">
+    <button class="btn btn-danger" data-dismiss="modal">Close</button>
+</div>

@@ -1,0 +1,119 @@
+﻿@model PagedList.IPagedList<u21487822_HW06.Models.product>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
+
+<br />
+
+<br />
+@using (Html.BeginForm("Index", "products", FormMethod.Get))
+{
+<p>
+    <b>Find by name:</b> @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+    <input class="btn" type="submit" value="Search" />
+</p>
+                <br />}
+<a class="btn btn-info" data-popup='' href='/Products/Create'> Create </a>
+<table class="table">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Year
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Brand
+        </th>
+        <th>
+            Category
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.product_name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.model_year)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.list_price)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.brand.brand_name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.category.category_name)
+    </td>
+    <td>
+
+        <a class="btn btn-primary" data-popup='' href='/Products/Edit?id=@item.product_id'> Edit </a> |
+
+        <a class="btn btn-info" data-popup='' href='/Products/Details?id=@item.product_id'> Details </a> |
+
+        <a class="btn btn-danger" data-popup='' href='/Products/Delete?id=@item.product_id'> Delete </a>
+
+
+    </td>
+</tr>}
+
+</table>
+
+<<div id='ModalIdFs' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='moContent'></div>
+        </div>
+    </div>
+</div>
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+
+<script type="text/javascript">$(document).ready(function () {
+        $.ajaxSetup({ cache: false });
+        $("a[data-popup]").on("click", function (e) {
+            $('#moContent').load(this.href, function () {
+                $('#ModalIdFs').modal({
+                    keyboard: true
+                }, 'show');
+                TriggerModalPopUp(this);
+            });
+            return false;
+        });
+    });
+
+    function TriggerModalPopUp(dialog) {
+        $('form', dialog).submit(function () {
+
+            $.ajax({
+                url: this.action,
+                type: this.method,
+                data: $(this).serialize(),
+                success: function (result) {
+                    if (result.RetVal) {
+                        $('#ModalIdFs').modal('hide');
+
+                        window.location.reload();
+                    } else {
+
+                        $('#moContent').html(result);
+                        bindForm();
+                    }
+                }
+            });
+            return false;
+        });
+    }</script>

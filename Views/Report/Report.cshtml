@@ -1,0 +1,36 @@
+﻿@model u21487822_HW06.Models.Reports
+@{ ViewBag.Title = "Report"; }
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<h1>Mountain Bike Order Report</h1>
+<br />
+<div id="chartContainer"></div>
+<script type="text/javascript">
+var chart = new CanvasJS.Chart("chartContainer", {
+            theme: "light2",
+            animationEnabled: true,
+            title: {
+                text: "Number of Mountain Bikes Sold"
+            },
+            data: [
+            {
+                type: "column",
+                dataPoints: [
+                    { y: @Model.Jan, label: "January" },
+					{ y: @Model.Feb, label: "Febuary" },
+					{ y: @Model.Mar, label: "March" },
+					{ y: @Model.Apr, label: "April" },
+					{ y: @Model.May, label: "May" },
+					{ y: @Model.Jun, label: "June" },
+					{ y: @Model.Jul, label: "July" },
+					{ y: @Model.Aug, label: "August" },
+                    { y: @Model.Sept, label: "september" },
+                    { y: @Model.Oct, label: "October" },
+                    { y: @Model.Nov, label: "November" },
+                    { y: @Model.Dec, label: "December" }
+                ]
+                @Html.Raw(ViewBag.DataPoints),
+            }
+            ]
+        });
+        chart.render();
+</script>
